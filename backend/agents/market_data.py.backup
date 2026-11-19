@@ -1,0 +1,50 @@
+import yfinance as yf
+
+from datetime import datetime, timezone
+
+
+def fetch_market_data(ticker_symbol: str):
+
+    # Connect to Yahoo Finance
+    stock = yf.Ticker(ticker_symbol)
+
+    # Get stock information
+    info = stock.info
+
+    # Get historical stock prices (1 year)
+    history = stock.history(period="1y")
+
+    if history.empty:
+        raise ValueError(f"No market data found for {ticker_symbol}")
+
+    # Extract historical prices
+    historical_prices = []
+
+    for date, row in history.iterrows():
+        historical_prices.append({
+            "date": date.strftime("%Y-%m-%d"),
+            "open": round(float(row["Open"]), 2),
+            "high": round(float(row["High"]), 2),
+            "low": round(float(row["Low"]), 2),
+            "close": round(float(row["Close"]), 2),
+            "volume": int(row["Volume"])
+        })
+
+    # Extract current market information
+    result = {
+        "ticker_symbol": ticker_symbol.upper(),
+        "company_name": info.get("longName"),
+        "currency": info.get("currency"),
+        "current_price": info.get("currentPrice") or info.get("regularMarketPrice"),
+        "previous_close": info.get("previousClose"),
+        "market_cap": info.get("marketCap"),
+        "fifty_two_week_high": info.get("fiftyTwoWeekHigh"),
+        "fifty_two_week_low": info.get("fiftyTwoWeekLow"),
+        "historical_data_period": "1 year",
+        "historical_prices": historical_prices,
+        "total_trading_days": len(historical_prices),
+        "source": "Yahoo Finance via yfinance",
+        "retrieved_at_utc": datetime.now(timezone.utc).isoformat()
+    }
+
+    return result

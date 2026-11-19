@@ -1,0 +1,104 @@
+import math
+from statistics import stdev
+
+
+def safe_divide(numerator, denominator):
+    if numerator is None or denominator in (None, 0):
+        return None
+
+    return numerator / denominator
+
+
+def get_numeric_value(metric):
+    if isinstance(metric, dict):
+        return metric.get("value")
+
+    return metric
+
+
+def calculate_volatility(closing_prices):
+    if len(closing_prices) < 2:
+        return None
+
+    daily_returns = []
+
+    for i in range(1, len(closing_prices)):
+        previous_price = closing_prices[i - 1]
+        current_price = closing_prices[i]
+
+        if previous_price and previous_price > 0:
+            daily_returns.append(
+                (current_price / previous_price) - 1
+            )
+
+    if len(daily_returns) < 2:
+        return None
+
+    return stdev(daily_returns) * math.sqrt(252)
+
+
+def calculate_max_drawdown(closing_prices):
+    if not closing_prices:
+        return None
+
+    highest_price = closing_prices[0]
+    maximum_drawdown = 0
+
+    for price in closing_prices:
+        highest_price = max(highest_price, price)
+
+        if highest_price > 0:
+            drawdown = (price - highest_price) / highest_price
+            maximum_drawdown = min(maximum_drawdown, drawdown)
+
+    return abs(maximum_drawdown)
+
+
+def analyze_financial_risk(financial_data, market_data):
+
+    metrics = financial_data.get("financial_metrics", {})
+    historical_prices = market_data.get("historical_prices", [])
+
+    revenue = get_numeric_value(metrics.get("revenue"))
+    net_income = get_numeric_value(metrics.get("net_income"))
+    total_assets = get_numeric_value(metrics.get("total_assets"))
+    total_liabilities = get_numeric_value(
+        metrics.get("total_liabilities")
+    )
+
+    closing_prices = [
+        item["close"]
+        for item in historical_prices
+        if item.get("close") is not None
+    ]
+
+    net_profit_margin = safe_divide(net_income, revenue)
+
+    liabilities_to_assets = safe_divide(
+        total_liabilities,
+        total_assets
+    )
+
+    volatility = calculate_volatility(closing_prices)
+
+    maximum_drawdown = calculate_max_drawdown(closing_prices)
+
+    return {
+        "ticker_symbol": market_data.get("ticker_symbol"),
+
+        "financial_risk_metrics": {
+            "net_profit_margin": net_profit_margin,
+            "liabilities_to_assets_ratio": liabilities_to_assets
+        },
+
+        "market_risk_metrics": {
+            "annualized_volatility": volatility,
+            "maximum_drawdown": maximum_drawdown,
+            "historical_trading_days": len(closing_prices)
+        },
+
+        "data_sources": [
+            "SEC Company Facts",
+            "Yahoo Finance via yfinance"
+        ]
+    }

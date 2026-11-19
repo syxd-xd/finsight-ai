@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#07111f" />
+    <meta name="description" content="FinSight AI multi-agent stock research and investment decision workspace." />
+    <title>FinSight AI | Investment Research</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <a class="brand" href="#dashboard" aria-label="FinSight AI dashboard">
+        <span class="brand-mark">F</span>
+        <span>FinSight <b>AI</b><small>INVESTMENT RESEARCH</small></span>
+      </a>
+      <div class="nav-caption">WORKSPACE</div>
+      <nav id="nav" aria-label="Main navigation">
+        <a href="#dashboard" data-page="dashboard"><i>01</i>Dashboard</a>
+        <a href="#new-research" data-page="new-research"><i>02</i>New Research</a>
+        <a href="#history" data-page="history"><i>03</i>Research History</a>
+        <a href="#companies" data-page="companies"><i>04</i>Companies</a>
+        <a href="#settings" data-page="settings"><i>05</i>Settings</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-note"><span class="pulse"></span><div><b>Research engine</b><small>Seven coordinated agents</small></div></div>
+        <div class="version">FINSIGHT AI <span>LOCAL WORKSPACE</span></div>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div class="crumb"><span>FinSight AI</span><b>/</b><strong id="pageCrumb">Dashboard</strong></div>
+        <div class="top-actions">
+          <div id="connection" class="connection"><span></span>Checking backend</div>
+          <span class="avatar" aria-hidden="true">A</span>
+          <div class="profile"><b>Analyst workspace</b><small>Live backend data</small></div>
+        </div>
+      </header>
+      <section class="page-head">
+        <div><div class="eyebrow" id="eyebrow">FINSIGHT AI</div><h1 id="pageTitle">Investment Research Dashboard</h1><p id="pageDesc">Live research activity and company insights.</p></div>
+        <a id="headAction" class="button primary" href="#new-research">+ <span>New research</span></a>
+      </section>
+      <div id="notice" class="notice" role="status" aria-live="polite"></div>
+      <div id="content"><div class="loading"><span class="spinner"></span>Loading workspace…</div></div>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
